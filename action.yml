@@ -1,0 +1,52 @@
+name: "action-yaml-map"
+description: |
+  - name: map
+    uses: NeuralInnovations/action-yaml-map@v1
+    id: map1
+    key: dev1
+    with:
+      map: |
+        dev1: dev1.host.com
+        dev2: 
+          domain: dev2.host.com
+          port: 8080
+  - name: test
+    run: |
+      echo "${{ steps.map1.outputs.value }}"
+      echo "${{ steps.map1.outputs.status }}" # ok|fail
+  #---------------------------------------------------
+  - name: map
+    uses: NeuralInnovations/action-yaml-map@v1
+    id: map2
+    key: dev2
+    with:
+      map: |
+        dev1: dev1.host.com
+        dev2: 
+          domain: dev2.host.com
+          port: 8080
+  - name: test
+    run: |
+      echo "${{ steps.map2.outputs.domain }}"
+      echo "${{ steps.map2.outputs.port }}"
+      echo "${{ steps.map2.outputs.status }}" # ok|fail
+inputs:
+  map:
+    description: |
+      map of objects (yaml)
+    required: true
+  key:
+    description: "key of map"
+    required: true
+  fail:
+    description: "true|false"
+    required: false 
+    default: "true"
+outputs:
+  status: # id of output
+    description: "status: ok|fail"
+  value: # id of output
+    description: "example: value of map"
+runs:
+  using: "node20"
+  main: "dist/index.js"
